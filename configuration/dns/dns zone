@@ -1,0 +1,11 @@
+Host                            TTL     Type    Target
+dev.[__CANONICAL_DOMAIN__]      86400   A       [__TARGET_IP__]
+stage.[__CANONICAL_DOMAIN__]    86400   A       [__TARGET_IP__]
+[__CANONICAL_DOMAIN__]          86400   A       [__TARGET_IP__]
+www.[__CANONICAL_DOMAIN__]      86400   CNAME   [__CANONICAL_DOMAIN__]
+
+Host                            TTL     Type    Priority        Target
+[__CANONICAL_DOMAIN__]          86400   MX      [__PRIORITY__]  [__CANONICAL_DOMAIN__]
+
+Host                            TLL     Type    Text                    Validate
+[__CANONICAL_DOMAIN__]          86400   TXT     "v=spf1 a mx -all"      SPF

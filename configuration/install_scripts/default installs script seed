@@ -1,0 +1,63 @@
+#!/bin/bash
+groupadd -r admin
+groupadd -r ssh
+useradd -m -G users,admin,ssh -s /bin/bash mhwang
+mkdir /home/mhwang/.ssh
+echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQClHq1XiJNyJ53YH0fqcUh1pbqhWFIeGzssc2MN8uev0WZ3kCmJymGUMDUcRTcxWjc4gEWwUwChWB+OJAwrwKD/qZ20T0iZNFeUwvQ/IYW75KfTrnyVB1OrT/gmlZleujvnI7KjJ5Nl2U7UOrb7GVeHJxM+ySatRH8EUhFINCFoCL/pT7/A2Xrji+Xr9ZuZfmixiQNtzfY5hBO2FLpDtP1x75r03SsFnoDgcHw5ezP+dgZO4ykzxIDR6gNnflbGla36YRInQGEkaoyCi5yFKFbHRidGSqpsJDR7m1KecZfoBArOQwz0mfpks5D4+a0R+T/Zs6r/v4GCWCBrwiz65r0n mhwang@epiphyte-g' >> /home/mhwang/.ssh/authorized_keys
+echo 'ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEA0KJVF5e1ANi8kInN70AolsZEaBdJY5Gn/OzmydxbXsUzj+Gtuf+PXUv0UfAWfuxnTfB+t648iXiYCw9MQgbiOdrUYj8Ywj7nkFMDUuJc8IDCOmkWAy6Wp4fq3r7pAVUxx2W/GGrmdItmt+VNzuDINfIJRvMJn3F7rCQ5FP/hu4dFjcUJkcfUC2gOWjZWQ3M2AURMuu8YmZsnB5V7Q6DZegeuFpz7lzaFgNEilRHzbn1o39zUpaqKbnhOnO3ORuK1A/yhUXggzFJqHJRuLVxGEphqNHLiXLM+w0wQXzMDpIuMhiLNiS5Ma1avVvX0i0+RjlUg7q3dHwvcEtQjfWKCVQ== marq.hwang@draftfcb.com' >> /home/mhwang/.ssh/authorized_keys
+chown -R mhwang:mhwang /home/mhwang/.ssh
+useradd -m -G users,admin,ssh -s /bin/bash cvuletich
+mkdir /home/cvuletich/.ssh
+echo 'ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAuCCChFMXAw06U7MZ0jfM5gzLlzpglv2zHXeW9oAAU6v+scgRTQr+m3/NUvy9kZdYO+zfTej0FTbdmcPhRZMPghFl5NwVQo8gKGavtY9hwLW6x9N48ZuyNbVGncKwNZiOH6/ovflPJqcKpZh9tscsxwvkq+VB3Jz20QiYxDWsNU0alc9+fIeBxPKW7nCHVKQ4CKhNVwb8NdvkMqx7UzkSBNgle8OIFlqbfkWCIBRO73c/BrQW/yv9sCrufmnrZafuas1JmgXo8vZq5v88T+upEmT7qBBpiHXHws237HTlQag+oCNkE3xzaohgiilngP7sEHLiU+Z3bg/aef1yr2XR2Q== christopher.vuletich@chidrf-nmx4488.na.corp.ipgnetwork.com' >> /home/cvuletich/.ssh/authorized_keys
+chown -R cvuletich:cvuletich /home/cvuletich/.ssh
+wget -O /etc/apt/sources.list.d/newrelic.list http://download.newrelic.com/debian/newrelic.list
+apt-key adv --keyserver hkp://subkeys.pgp.net --recv-keys 548C16BF
+wget -q "http://agentrepo.drivesrvr.com/debian/agentrepo.key" -O- | apt-key add -
+echo "deb [arch=amd64] http://agentrepo.drivesrvr.com/debian/ serveragent main" > /etc/apt/sources.list.d/driveclient.list
+apt-get update
+apt-get upgrade -y
+apt-get dist-upgrade -y
+apt-get autoremove -y
+apt-get install -y driveclient rkhunter chkrootkit newrelic-sysmond ufw fail2ban unattended-upgrades git mcrypt lsyncd inotify-tools htop vnstat iftop postfix
+
+apt-get install -y nginx-light varnish
+apt-get install -y nginx-light varnish memcached php5-cli php5-fpm php5-suhosin newrelic-php5 php5-curl php5-mcrypt php5-gd php-apc php5-imap php5-memcache php5-imap
+apt-get install -y nginx-light varnish memcached php5-cli php5-fpm php5-suhosin newrelic-php5 php5-curl php5-mcrypt php5-gd php-apc php5-imap php5-memcache php5-imap php5-mysqlnd
+apt-get install -y nginx-light varnish memcached php5-cli php5-fpm php5-suhosin newrelic-php5 php5-curl php5-mcrypt php5-gd php-apc php5-imap php5-memcache php5-imap php5-pgsql
+
+apt-get install -y postgresql-9.1 postgresql-contrib-9.1
+apt-get install -y mysql-server
+apt-get install -y opendkim/precise-backports opendkim-tools/precise-backports
+
+apt-get install -y nfs-kernel-server
+apt-get install -y nfs-common
+
+apt-get install -y uwsgi python-pip python-virtualenv
+apt-get install -y npm
+apt-get install -y ruby1.9.1-full
+
+ufw enable
+ufw allow openssh
+ufw allow http
+
+su postgres
+psql -c "ALTER ROLE postgres WITH PASSWORD '[__PASSWORD__]';"
+exit
+
+passwd mhwang
+
+dpkg-reconfigure -plow unattended-upgrades
+nrsysmond-config --set license_key=07080bb220264c489202d59873d30ee1921b5329
+newrelic-install
+driveclient --configure
+
+su [__CLIENT__]
+#!/bin/bash
+mkdir repos sites{,/certs,/default,/[__SITE_NAME__]{,/releases{,/initial,/ftp},/stage,/dev}} logs{,/nginx,/inotify,/newrelic,/lsyncd,/varnish,/php,/memcached,/mysql,/postgres}
+ln -s ~/sites/default ~/sites/[__SITE_NAME__]/current
+touch ~/logs/inotify/{restart,update}.log
+touch ~/logs/php/php-{mail,fpm}.log
+wget -c http://assets.draftfcb.net/default.tar.bz2
+tar -xjf default.tar.bz2 -C ./sites/default/
+rm default.tar.bz2
+ssh-keygen -t rsa

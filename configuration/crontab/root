@@ -1,0 +1,6 @@
+#   mn  hr  dom mon dow     cmd
+#   *   *   *   *   *       *
+#   @reboot
+#@reboot                    /root/restart_servers.sh &
+#@reboot                    /root/restart_varnish.sh &
+#@reboot                    lsyncd /root/lsyncd.conf

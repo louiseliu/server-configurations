@@ -1,0 +1,6 @@
+#<file system>  <mount point>       <type>  <options>                   <dump>  <pass>
+proc            /proc               proc    nodev,noexec,nosuid         0       1
+/dev/xvda1      /                   ext3    errors=remount-ro,barrier=0 0       1
+/dev/xvdb1      /[__NFS_DIR__]      ext4    noatime,user,rw,barrier=0   0       1
+/dev/xvdc1      none                swap    sw                          0       1
+/[__NFS_DIR__]  /export/[__SHARE__] none    bind                        0       1

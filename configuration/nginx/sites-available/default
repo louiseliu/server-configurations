@@ -1,0 +1,20 @@
+server {
+    listen          127.0.0.1:80 default;
+    server_name     [__SITE_NAME__];
+
+    access_log      /home/[__CLIENT__]/logs/nginx/[__SITE_NAME__].access.log    main;
+    error_log       /home/[__CLIENT__]/logs/nginx/[__SITE_NAME__].error.log;
+
+    root            /home/[__CLIENT__]/sites/default;
+    index           index.php index.html;
+#    try_files       $uri $uri/ index.html =404;
+
+    charset         utf-8;
+
+    include         conf.d/robots.conf;
+    include         conf.d/ua-compatible.conf;
+    include         conf.d/protection-system.conf;
+    include         conf.d/cross-domain.conf;
+    include         conf.d/expiry.conf;
+    include         conf.d/error-pages.conf;
+}

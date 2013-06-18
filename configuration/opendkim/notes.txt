@@ -1,0 +1,5 @@
+https://help.ubuntu.com/community/Postfix/DKIM
+http://www.itworld.com/software/67334/how-deploy-dkim-email-authentication-4-steps
+
+http://dkim.org/
+http://en.wikipedia.org/wiki/DKIM
