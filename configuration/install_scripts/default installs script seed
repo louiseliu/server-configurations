@@ -53,11 +53,13 @@ driveclient --configure
 
 su [__CLIENT__]
 #!/bin/bash
-mkdir repos sites{,/certs,/default,/[__SITE_NAME__]{,/releases{,/initial,/ftp},/stage,/dev}} logs{,/nginx,/inotify,/newrelic,/lsyncd,/varnish,/php,/memcached,/mysql,/postgres}
+mkdir repos sites{,/default,/[__SITE_NAME__]{,/releases{,/initial,/ftp},/stage,/dev}} certs logs{,/nginx,/inotify,/newrelic,/lsyncd,/varnish,/php,/memcached,/mysql,/postgres}
 ln -s ~/sites/default ~/sites/[__SITE_NAME__]/current
 touch ~/logs/inotify/{restart,update}.log
 touch ~/logs/php/php-{mail,fpm}.log
 wget -c http://assets.draftfcb.net/default.tar.bz2
 tar -xjf default.tar.bz2 -C ./sites/default/
 rm default.tar.bz2
+cd ~/certs
+openssl req -new -newkey rsa:2048 -nodes -keyout [__CANONICAL_DOMAIN__].key -out [__CANONICAL_DOMAIN__].csr
 ssh-keygen -t rsa
